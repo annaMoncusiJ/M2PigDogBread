@@ -7,13 +7,15 @@ import os
 from PIL import Image
 import re
 import random
-
+from sklearn import svm
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
 # Transformaciones para normalizar las imágenes y convertirlas a tensores de PyTorch
 transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
 
 # Cargar el conjunto de datos MNIST desde "Descargas\img" y aplicar transformaciones
-img_dir = "C:\\Users\\Francesc\\Downloads\\ImgTools.co-PNG"
+img_dir = "C:\\Users\\aleej\Desktop\\IA BIG DATA\\M2\\M2 A5 ClasificadorDogPigBread" 
 img_list = os.listdir(img_dir)
 
 train_images = []
@@ -66,3 +68,22 @@ train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=5, 
     
 #     # Romper el bucle después de visualizar un lote
 #     break
+
+
+# Convertir listas a matrices NumPy
+X = np.array(train_images)
+y = np.array(train_labels)
+
+# Dividir el conjunto de datos en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Crear y entrenar el clasificador SVM
+clf = svm.SVC(kernel='linear', C=1)
+clf.fit(X_train, y_train)
+
+# Realizar predicciones en el conjunto de prueba
+y_pred = clf.predict(X_test)
+
+# Calcular la precisión del modelo
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Precisión del modelo: {accuracy * 100:.2f}%')
