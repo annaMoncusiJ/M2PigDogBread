@@ -13,21 +13,35 @@ from sklearn.metrics import accuracy_score
 
 # Transformaciones para normalizar las imágenes y convertirlas a tensores de PyTorch
 transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
-
+url = "C:\\Users\\Francesc\\Downloads\\M4DogPigBread\\"
 # Cargar el conjunto de datos MNIST desde "Descargas\img" y aplicar transformaciones
-img_dir = "C:\\Users\\aleej\Desktop\\IA BIG DATA\\M2\\M2 A5 ClasificadorDogPigBread" 
-img_list = os.listdir(img_dir)
+img_dir_pig = url+"Pig"
+img_dir_dog = url+"Dog"
+img_dir_bread = url+"Bread"
+img_list_pig = ["pig_" + img for img in os.listdir(img_dir_pig)] 
+img_list_dog = ["dog_" + img for img in os.listdir(img_dir_dog)] 
+img_list_bread = ["bread_" + img for img in os.listdir(img_dir_bread)] 
+img_list = img_list_pig + img_list_dog + img_list_bread
+
+random.shuffle(img_list)
 
 train_images = []
 train_labels = []
 
 for img in img_list:
     if img.endswith(".png"): # Asumiendo que las imágenes son archivos .jpg
-        numbers = [int(digit) for digit in re.findall(r'\d', img)]
-        label = ''.join(str(num) for num in numbers)
-        if(label == ""):
-            label = random.randint(10000, 9999999999)
+        type, img = img.split('_', 1)
 
+        if type == "pig":
+            label = 0
+            img_dir = img_dir_pig
+        elif type == "dog":
+            label = 1
+            img_dir = img_dir_dog
+        elif type == "bread":
+            label = 2
+            img_dir = img_dir_bread
+            
         # label = int(img.split("_")[0]) # Extraer la etiqueta de la imagen
         img_path = os.path.join(img_dir, img)
         img_pil = Image.open(img_path).convert("L") # Convertir a escala de grises
