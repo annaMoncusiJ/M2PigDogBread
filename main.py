@@ -1,3 +1,4 @@
+from config import *
 import torch
 from torchvision import transforms
 import numpy as np
@@ -14,7 +15,8 @@ import torch.nn.functional as F
 transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
 
 # Ruta base para las carpetas de imágenes
-url = "C:\\Users\\aleej\\Desktop\\IA BIG DATA\\M2\\M2 A5 ClasificadorDogPigBread\\M2DogPigBread\\"
+# url = "C:\\Users\\aleej\\Desktop\\IA BIG DATA\\M2\\M2 A5 ClasificadorDogPigBread\\M2DogPigBread\\"
+# La url s'agafa de "config.py"
 
 img_dir_pig = os.path.join(url, "Pig")
 img_dir_dog = os.path.join(url, "Dog")
