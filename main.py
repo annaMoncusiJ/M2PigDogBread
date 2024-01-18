@@ -30,8 +30,6 @@ for img in img_list:
     if img.endswith(".png"): # Asumiendo que las imágenes son archivos .jpg
         type, img = img.split('_', 1)
 
-        numbers = [int(digit) for digit in re.findall(r'\d', img)]
-
         if type == "pig":
             label = 0
             img_dir = img_dir_pig
