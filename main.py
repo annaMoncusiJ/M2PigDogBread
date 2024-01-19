@@ -129,6 +129,8 @@ def calcula_que_es(input_image_path):
     # Mapear las clases predichas a etiquetas deseadas
     class_mapping = {0: "Cerdo", 1: "Perro", 2: "Pan"}
     predicted_label = class_mapping.get(predicted_class[0])
+    # Formatear la probabilidad en porcentaje con dos decimales
+    formatted_probability = f"{probabilities[0][predicted_class[0]] * 100:.2f}"
 
     # Imprimir la clase predicha
-    return f'La imagen es un.... {predicted_label} estoy seguro al {probabilities[0][predicted_class[0]]} %'
+    return f'La imagen es un.... {predicted_label}, estoy seguro al {formatted_probability} %'
