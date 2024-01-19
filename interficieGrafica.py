@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinterdnd2 import TkinterDnD, DND_FILES
 from PIL import Image, ImageTk
 from main import calcula_que_es
+import os
 
 def mostrar_imagen(imagen_path, resultado_text):
     global imagen_tk  # Hacer la referencia global
@@ -31,7 +32,9 @@ def mostrar_imagen(imagen_path, resultado_text):
 
 def on_drop(event):
     archivo = event.data
-    mostrar_imagen(archivo, resultado)
+    archivo_sin_corchetes = archivo.replace('{', '').replace('}', '')  # Eliminar corchetes
+    archivo_norm = os.path.normpath(archivo_sin_corchetes)  # Normalizar la ruta
+    mostrar_imagen(archivo_norm, resultado)
 
 
 # Crear la ventana principal
@@ -45,7 +48,7 @@ lienzo.pack(pady=10)
 # Etiqueta para mostrar el resultado
 resultado = tk.Label(ventana, text="", font=("Helvetica", 12))
 resultado.pack(pady=10)
-resultado.config(text="Arrosega una imatge")
+resultado.config(text="Arrastra y Suelta Imagen")
 
 
 # Configurar la zona de arrastre (que es el propio lienzo)
