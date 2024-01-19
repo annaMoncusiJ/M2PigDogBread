@@ -124,6 +124,7 @@ def load_and_process_image(url_img):
     else:
         print("La imagen no es png")
 
+
 def calcula_que_es(input_image_path):
     # Realizar la predicción para la imagen de entrada
     input_image = load_and_process_image(input_image_path)
