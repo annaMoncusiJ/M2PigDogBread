@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import joblib
 import torch.nn.functional as F
+from interficieGrafica import *
 
 # Redimensionar todas las imágenes al mismo tamaño
 target_size = (128, 128)  # Cambia el tamaño según tus necesidades
@@ -102,6 +103,7 @@ print(f'Precisión del modelo: {accuracy * 100:.2f}%')
 # Guardar el modelo entrenado
 joblib.dump(clf, 'svm_model.pkl')
 
+
 # Ruta de la imagen de entrada que deseas clasificar
 # input_image_path = "C:\\Users\\aleej\\Desktop\\IA BIG DATA\\M2\\M2 A5 ClasificadorDogPigBread\\Predict\\perro.png"
 input_image_path = url_imatge
@@ -122,12 +124,13 @@ def load_and_process_image(url_img):
     else:
         print("La imagen no es png")
 
-# Realizar la predicción para la imagen de entrada
-input_image = load_and_process_image(input_image_path)
-# images_resized = F.interpolate(input_image.unsqueeze(0), size=target_size, mode='bilinear', align_corners=False).squeeze(0)
+def calcula_que_es(input_image_path):
+    # Realizar la predicción para la imagen de entrada
+    input_image = load_and_process_image(input_image_path)
+    # images_resized = F.interpolate(input_image.unsqueeze(0), size=target_size, mode='bilinear', align_corners=False).squeeze(0)
 
-predicted_class = loaded_model.predict(input_image)
-probabilities = loaded_model.predict_proba(input_image)
+    predicted_class = loaded_model.predict(input_image)
+    probabilities = loaded_model.predict_proba(input_image)
 
-# Imprimir la clase predicha
-print(f'La imagen de entrada pertenece a la clase: {predicted_class[0]} with probability of {probabilities[0][predicted_class[0]]}')
+    # Imprimir la clase predicha
+    return(f'La imagen de entrada pertenece a la clase: {predicted_class[0]} with probability of {probabilities[0][predicted_class[0]]}')
