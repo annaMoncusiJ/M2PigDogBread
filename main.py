@@ -69,14 +69,14 @@ if not os.path.exists(modelo_svm_ruta):
 
     # Crear DataLoader personalizado para cargar las imágenes de entrenamiento
     class CustomDataset(torch.utils.data.Dataset):
-        def _init_(self, images, labels):
+        def __init__(self, images, labels):
             self.images = images
             self.labels = labels
 
-        def _len_(self):
+        def __len__(self):
             return len(self.images)
 
-        def _getitem_(self, idx):
+        def __getitem__(self, idx):
             return self.images[idx], self.labels[idx]
 
     # crea un dataset amb les imatges processades
