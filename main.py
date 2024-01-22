@@ -92,49 +92,56 @@ if not os.path.exists(modelo_svm_ruta):
     X = torch.stack(train_images_resized).numpy()
     y = np.array(train_labels)
 
-    # 
+    # Separa en variables mes comodes les dades
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
 
-    # Redimensionar las matrices para que sean compatibles con el clasificador SVM
+    # Redimensionem les matrius per a que siguin compatibles amb SVM
     X_train = X_train.reshape(X_train.shape[0], -1)
     X_test = X_test.reshape(X_test.shape[0], -1)
 
-    # Crear y entrenar el clasificador SVM
+    # Creem i entrenem el classificador SVM
     clf = svm.SVC(kernel='linear', C=1, probability=True)
     clf.fit(X_train, y_train)
 
-    # Guardar el modelo entrenado
+    # Guardem el model entrenat per a no haber de fer tot el process sempre
     joblib.dump(clf, 'svm_model.pkl')
 
     print("Modelo entrenado y guardado exitosamente.")
-# Cargar el modelo SVM previamente entrenado
+
+# Cergem el model creat anteriorment
 loaded_model = joblib.load('svm_model.pkl')
 
-# Función para cargar y procesar una imagen de entrada
+# Cargem i processem una imatge
 def load_and_process_image(url_img):
     if url_img.endswith(".png"):
         img_pil = Image.open(url_img).convert("L")
         img_tensor = transform(img_pil)
         
-        # Redimensionar la imatge al mismo tamaño que las imágenes de entrenamiento
+        # Redimensiona imatge
         img_resized = F.interpolate(img_tensor.unsqueeze(0), size=target_size, mode='bilinear', align_corners=False).squeeze(0)
         
-        img_resized = img_resized.reshape(1, -1)  # Redimensionar para que sea compatible con el clasificador SVM
+        # redimendiona per a ser compatible amb SVM
+        img_resized = img_resized.reshape(1, -1) 
         return img_resized
     else:
         print("La imagen no es png")
+        return None
 
+# Funcio que fa que es process l'imatge i llença la predicció
 def calcula_que_es(input_image_path):
-    # Realizar la predicción para la imagen de entrada
+    # Fem la prediccio
     input_image = load_and_process_image(input_image_path)
-    predicted_class = loaded_model.predict(input_image)
-    probabilities = loaded_model.predict_proba(input_image)
+    if(input_image != None):
+        predicted_class = loaded_model.predict(input_image)
+        probabilities = loaded_model.predict_proba(input_image)
 
-    # Mapear las clases predichas a etiquetas deseadas
-    class_mapping = {0: "Cerdo", 1: "Perro", 2: "Pan"}
-    predicted_label = class_mapping.get(predicted_class[0])
-    # Formatear la probabilidad en porcentaje con dos decimales
-    formatted_probability = f"{probabilities[0][predicted_class[0]] * 100:.2f}"
+        # Mapejem les classes en etiquetes
+        class_mapping = {0: "Cerdo", 1: "Perro", 2: "Pan"}
+        predicted_label = class_mapping.get(predicted_class[0])
 
-    # Imprimir la clase predicha
-    return f'La imagen es un.... {predicted_label}, estoy seguro al {formatted_probability} %'
+        # Formatejem el percentatge en dos decimals
+        formatted_probability = f"{probabilities[0][predicted_class[0]] * 100:.2f}"
+
+        # Retorna el text de la predicció
+        return f'La imagen es un.... {predicted_label}, estoy seguro al {formatted_probability} %'
+    else: return f'La imagen no tiene formato .png'
